@@ -1,7 +1,6 @@
 if (typeof window !== 'undefined') window.$ = window.jQuery = require('jquery');
 
 ImageSequencer = function ImageSequencer(options) {
-console.log(ImageSequencer);
   options = options || {};
   options.inBrowser = options.inBrowser || typeof window !== 'undefined';
   if (options.inBrowser) options.ui = options.ui || require('./UserInterface');
@@ -102,6 +101,7 @@ console.log(ImageSequencer);
     image.onload = function() {
       run(image);
       if (callback) callback(image);
+      document.sequencer_image = image;
     }
     image.src = src;
   }
