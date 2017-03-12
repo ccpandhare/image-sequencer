@@ -1,10 +1,11 @@
 if (typeof window !== 'undefined') window.$ = window.jQuery = require('jquery');
 
 ImageSequencer = function ImageSequencer(options) {
-
+console.log(ImageSequencer);
   options = options || {};
   options.inBrowser = options.inBrowser || typeof window !== 'undefined';
   if (options.inBrowser) options.ui = options.ui || require('./UserInterface');
+  options.sequencer_counter = 0;
 
   var image,
       steps = [],
@@ -19,6 +20,7 @@ ImageSequencer = function ImageSequencer(options) {
     console.log('adding step "' + name + '"');
 
     o = o || {};
+    o.id = options.sequencer_counter++; //Gives a Unique ID to each step
     o.name = o.name || name;
     o.selector = o.selector || 'ismod-' + name;
     o.container = o.container || options.selector;
@@ -30,7 +32,8 @@ ImageSequencer = function ImageSequencer(options) {
     function defaultSetupModule() {
       if (options.ui) module.options.ui = options.ui({
         selector: o.selector,
-        title: module.options.title
+        title: module.options.title,
+        id: o.id
       });
     }
 
@@ -60,7 +63,7 @@ ImageSequencer = function ImageSequencer(options) {
 
     }
 
-    // Pre-set the initial output behavior of the final step, 
+    // Pre-set the initial output behavior of the final step,
     // which will be changed if an additional step is added.
     module.options.output = function output(image) {
       if (module.options.ui && module.options.ui.display) module.options.ui.display(image);
@@ -68,7 +71,17 @@ ImageSequencer = function ImageSequencer(options) {
 
   }
 
-  // passed image is optional but you can pass a 
+  function removeStep (id) {
+    for (i=0;i<steps.length;i++) {
+      if (steps[i].options.id == id && steps[i].options.name != 'image-select'){
+        $('div#sequencer-'+id).remove();
+        steps.splice(i,1);
+        run(document.sequencer_image);
+      }
+    }
+  }
+
+  // passed image is optional but you can pass a
   // non-stored image through the whole steps chain
   function run(image) {
     if (image) steps[1].draw(image);
@@ -97,6 +110,7 @@ ImageSequencer = function ImageSequencer(options) {
     options: options,
     loadImage: loadImage,
     addStep: addStep,
+    removeStep: removeStep,
     run: run,
     modules: modules,
     steps: steps,

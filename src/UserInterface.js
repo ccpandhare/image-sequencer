@@ -5,10 +5,10 @@ module.exports = function UserInterface(options) {
 
   options = options || {};
   options.container = options.container || ".panels";
-
+  options.id = options.id;
   options.random = options.random || parseInt(Math.random() * (new Date()).getTime() / 1000000);
-  options.uniqueSelector = options.uniqueSelector || options.selector + '-' + options.random; 
-  $(options.container).append('<div class="panel ' + options.selector + ' ' + options.uniqueSelector + '"><div class="image"></div></div>');
+  options.uniqueSelector = options.uniqueSelector || options.selector + '-' + options.random;
+  $(options.container).append('<div class="panel ' + options.selector + ' ' + options.uniqueSelector + '" id="sequencer-'+options.id+'"><div class="image"></div></div>');
   options.el = options.el || $('.' + options.uniqueSelector);
   createLabel(options.el);
 

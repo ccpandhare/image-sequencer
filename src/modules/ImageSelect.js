@@ -41,7 +41,7 @@ module.exports = function ImageSelect(options) {
           // we should trigger "load" event here
 
           image = new Image();
-          image.src = event.target.result;
+          image.src = e.target.result; //Updated
 
           el.html(image); // may be redundant
 
