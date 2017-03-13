@@ -5,6 +5,7 @@ ImageSequencer = function ImageSequencer(options) {
   options.inBrowser = options.inBrowser || typeof window !== 'undefined';
   if (options.inBrowser) options.ui = options.ui || require('./UserInterface');
   options.sequencer_counter = 0;
+  options.initial_image = "";
 
   var image,
       steps = [],
@@ -75,7 +76,7 @@ ImageSequencer = function ImageSequencer(options) {
       if (steps[i].options.id == id && steps[i].options.name != 'image-select'){
         $('div#sequencer-'+id).remove();
         steps.splice(i,1);
-        run(document.sequencer_image);
+        run(options.initial_image);
       }
     }
   }
@@ -101,7 +102,7 @@ ImageSequencer = function ImageSequencer(options) {
     image.onload = function() {
       run(image);
       if (callback) callback(image);
-      document.sequencer_image = image;
+      options.initial_image = image;
     }
     image.src = src;
   }
