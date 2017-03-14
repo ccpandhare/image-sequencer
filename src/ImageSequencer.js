@@ -5,7 +5,7 @@ ImageSequencer = function ImageSequencer(options) {
   options.inBrowser = options.inBrowser || typeof window !== 'undefined';
   if (options.inBrowser) options.ui = options.ui || require('./UserInterface');
   options.sequencer_counter = 0;
-  options.initial_image = "";
+  options.initialImage = "";
 
   var image,
       steps = [],
@@ -54,8 +54,8 @@ ImageSequencer = function ImageSequencer(options) {
       if (previousStep) {
         // connect output of last step to input of this step
         previousStep.options.output = function output(image) {
-          if (sequencer.steps[0].options.initial_image) {
-            options.initial_image = sequencer.steps[0].options.initial_image;
+          if (sequencer.steps[0].options.initialImage) {
+            options.initialImage = sequencer.steps[0].options.initialImage;
           }
           log('running module "' + name + '"');
           // display the image in any available ui
@@ -77,9 +77,9 @@ ImageSequencer = function ImageSequencer(options) {
   function removeStep (id) {
     for (i=0;i<steps.length;i++) {
       if (steps[i].options.id == id && steps[i].options.name != 'image-select'){
-        $('div#sequencer-'+id).remove();
+        if (options.inBrowser) $('div#sequencer-'+id).remove();
         steps.splice(i,1);
-        run(options.initial_image);
+        run(options.initialImage);
       }
     }
   }
@@ -105,7 +105,7 @@ ImageSequencer = function ImageSequencer(options) {
     image.onload = function() {
       run(image);
       if (callback) callback(image);
-      options.initial_image = image;
+      options.initialImage = image;
     }
     image.src = src;
   }
