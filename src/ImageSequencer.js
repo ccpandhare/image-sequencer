@@ -1,6 +1,7 @@
 if (typeof window !== 'undefined') window.$ = window.jQuery = require('jquery');
 
 ImageSequencer = function ImageSequencer(options) {
+
   options = options || {};
   options.inBrowser = options.inBrowser || typeof window !== 'undefined';
   if (options.inBrowser) options.ui = options.ui || require('./UserInterface');
@@ -19,6 +20,11 @@ ImageSequencer = function ImageSequencer(options) {
   function addStep(name, o) {
     console.log('adding step "' + name + '"');
 
+    if (!(options.instanceName) && this != window)
+      for(var variable in window)
+        if(window[variable] == this)
+          options.instanceName = variable;
+
     o = o || {};
     o.id = options.sequencer_counter++; //Gives a Unique ID to each step
     o.name = o.name || name;
@@ -33,7 +39,8 @@ ImageSequencer = function ImageSequencer(options) {
       if (options.ui) module.options.ui = options.ui({
         selector: o.selector,
         title: module.options.title,
-        id: o.id
+        id: o.id,
+        instanceName: options.instanceName
       });
     }
 
@@ -77,6 +84,7 @@ ImageSequencer = function ImageSequencer(options) {
   function removeStep (id) {
     for (i=0;i<steps.length;i++) {
       if (steps[i].options.id == id && steps[i].options.name != 'image-select'){
+        console.log('removing step "'+steps[i].options.name+'"');
         if (options.inBrowser) $('div#sequencer-'+id).remove();
         steps.splice(i,1);
         run(options.initialImage);
@@ -101,6 +109,10 @@ ImageSequencer = function ImageSequencer(options) {
   // this could send the image to ImageSelect, or something?
 // not currently working
   function loadImage(src, callback) {
+    if (!(options.instanceName) && this != window)
+      for(var variable in window)
+        if(window[variable] == this)
+          options.instanceName = variable;
     image = new Image();
     image.onload = function() {
       run(image);
