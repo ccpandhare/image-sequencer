@@ -17,7 +17,7 @@
 
    options = options || {};
    options.title = "Crop Image";
-   options.format = options.format || "png";
+   options.format = options.format || "jpg";
 
    function draw(image) {
      var getPixels = require("get-pixels"),
