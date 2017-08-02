@@ -9,5 +9,6 @@ module.exports = {
   'invert': require('./modules/Invert/Module'),
   'crop': require('./modules/Crop/Module'),
   'segmented-colormap': require('./modules/SegmentedColormap/Module'),
-  'fisheye-gl': require('./modules/FisheyeGl/Module')
+  'fisheye-gl': require('./modules/FisheyeGl/Module'),
+  'flood-fill': require('./modules/FloodFill/Module')
 }
